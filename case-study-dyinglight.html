@@ -1,0 +1,403 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dying Light 2 Redux | Joshua Rubin</title>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600&family=Source+Sans+3:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            font-family: 'Source Sans 3', -apple-system, BlinkMacSystemFont, sans-serif;
+            font-weight: 300;
+            line-height: 1.8;
+            color: #3d2e1f;
+            background-color: #faf6f1;
+        }
+
+        /* Navigation */
+        .nav {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            background: rgba(250, 246, 241, 0.95);
+            backdrop-filter: blur(10px);
+            padding: 1rem 2rem;
+            z-index: 1000;
+            border-bottom: 1px solid rgba(212, 165, 116, 0.3);
+        }
+
+        .nav-inner {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .nav-name {
+            font-family: 'Playfair Display', Georgia, serif;
+            font-size: 1.25rem;
+            color: #2c1810;
+            text-decoration: none;
+        }
+
+        .nav-back {
+            color: #8b4513;
+            text-decoration: none;
+            font-size: 0.95rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .nav-back:hover {
+            color: #2c1810;
+        }
+
+        /* Hero Section */
+        .case-hero {
+            padding: 8rem 2rem 4rem;
+            background: linear-gradient(135deg, #2c1810 0%, #6b5344 100%);
+            color: #fff;
+            text-align: center;
+        }
+
+        .case-label {
+            font-size: 0.9rem;
+            text-transform: uppercase;
+            letter-spacing: 0.15em;
+            color: #d4c4b0;
+            margin-bottom: 1rem;
+        }
+
+        .case-title {
+            font-family: 'Playfair Display', Georgia, serif;
+            font-size: 3rem;
+            font-weight: 500;
+            margin-bottom: 1.5rem;
+        }
+
+        .case-subtitle {
+            font-size: 1.3rem;
+            color: #c9b99a;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        /* Hero Image */
+        .hero-image-section {
+            padding: 0 2rem;
+            margin-top: -3rem;
+            position: relative;
+            z-index: 10;
+        }
+
+        .hero-image-container {
+            max-width: 900px;
+            margin: 0 auto;
+            border-radius: 20px;
+            overflow: hidden;
+            box-shadow: 0 20px 60px rgba(61, 46, 31, 0.2);
+        }
+
+        .hero-image-container img {
+            width: 100%;
+            height: auto;
+            display: block;
+        }
+
+        /* Content */
+        .content {
+            max-width: 680px;
+            margin: 0 auto;
+            padding: 4rem 2rem;
+        }
+
+        .section-label {
+            font-size: 0.85rem;
+            text-transform: uppercase;
+            letter-spacing: 0.15em;
+            color: #8b6914;
+            margin-bottom: 0.75rem;
+        }
+
+        .section-title {
+            font-family: 'Playfair Display', Georgia, serif;
+            font-size: 2rem;
+            font-weight: 500;
+            color: #2c1810;
+            margin-bottom: 1.5rem;
+        }
+
+        p {
+            font-size: 1.15rem;
+            margin-bottom: 1.5rem;
+            color: #4a3728;
+        }
+
+        /* Pull Quotes */
+        .pull-quote {
+            margin: 3rem 0;
+            padding: 2rem 0;
+            border-top: 1px solid #d4a574;
+            border-bottom: 1px solid #d4a574;
+            opacity: 0;
+            transform: translateY(40px);
+            transition: opacity 0.8s ease-out, transform 0.8s ease-out;
+        }
+
+        .pull-quote.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .pull-quote p {
+            font-family: 'Playfair Display', Georgia, serif;
+            font-size: 1.5rem;
+            font-weight: 400;
+            line-height: 1.5;
+            color: #8b4513;
+            text-align: center;
+            font-style: italic;
+            margin-bottom: 0;
+        }
+
+        /* Section breaks */
+        .section-break {
+            height: 1px;
+            background: linear-gradient(90deg, transparent, #d4a574, transparent);
+            margin: 4rem 0;
+        }
+
+        /* Work Items */
+        .work-items {
+            margin: 2rem 0;
+        }
+
+        .work-item {
+            margin-bottom: 1rem;
+            padding: 1rem 1.5rem;
+            background: rgba(44, 24, 16, 0.05);
+            border-radius: 8px;
+            border-left: 3px solid #6b5344;
+        }
+
+        .work-item p {
+            margin-bottom: 0;
+            font-size: 1.05rem;
+        }
+
+        /* Content Images */
+        .content-image {
+            margin: 3rem 0;
+            border-radius: 16px;
+            overflow: hidden;
+            box-shadow: 0 8px 30px rgba(61, 46, 31, 0.12);
+        }
+
+        .content-image img {
+            width: 100%;
+            height: auto;
+            display: block;
+        }
+
+        /* Bottom Case Studies */
+        .bottom-case-studies {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 1rem;
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 3rem 2rem 5rem;
+        }
+
+        .bottom-case-study {
+            display: block;
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 4px 15px rgba(61, 46, 31, 0.1);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .bottom-case-study:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 25px rgba(61, 46, 31, 0.15);
+        }
+
+        .bottom-case-study img {
+            width: 100%;
+            height: 120px;
+            object-fit: cover;
+            display: block;
+        }
+
+        /* Footer */
+        footer {
+            text-align: center;
+            padding: 3rem 2rem;
+            background: #2c1810;
+            color: rgba(255, 255, 255, 0.7);
+            font-size: 0.9rem;
+        }
+
+        footer a {
+            color: #d4a574;
+            text-decoration: none;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .case-title {
+                font-size: 2.2rem;
+            }
+
+            .section-title {
+                font-size: 1.6rem;
+            }
+
+            .content {
+                padding: 3rem 1.5rem;
+            }
+
+            .hero-image-container {
+                height: 250px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="nav">
+        <div class="nav-inner">
+            <a href="index.html" class="nav-name">Joshua Rubin</a>
+            <a href="index.html#work" class="nav-back">← Back to Work</a>
+        </div>
+    </nav>
+
+    <!-- Hero -->
+    <section class="case-hero">
+        <p class="case-label">Narrative Systems · Techland (2022-2024)</p>
+        <h1 class="case-title">Dying Light 2 Redux</h1>
+        <p class="case-subtitle">Reimagining an entire AAA narrative without changing the gameplay.</p>
+    </section>
+
+    <!-- Hero Image -->
+    <div class="hero-image-section">
+        <div class="hero-image-container">
+            <img src="Dying%20Light/Image%201.jpeg" alt="Dying Light 2 Redux">
+        </div>
+    </div>
+
+    <!-- Content -->
+    <div class="content">
+        <p class="section-label">The Challenge</p>
+        <h2 class="section-title">Great Gameplay, Broken Story</h2>
+
+        <p>Techland had a problem. Their AAA open-world game <em>Dying Light 2</em> was a hit — players loved the gameplay. But the story had bombed. Reviewers and players complained of a plot that made it impossible to invest emotionally, branching that didn't honor player choices, and no coherent reason to finish most missions beyond "follow the yellow marker."</p>
+
+        <p>I was brought in as a consultant to assess the damage. My conclusion: the narrative wasn't salvageable. But the game itself was incredibly fun. It deserved a story worthy of the gameplay.</p>
+
+        <p>I was hired as Narrative Director to lead the charge, building a team of writers to rip apart a living game and put it back together again.</p>
+
+        <div class="pull-quote">
+            <p>"The game itself was incredibly fun. It deserved a story worthy of the gameplay."</p>
+        </div>
+
+        <p class="section-label">The Approach</p>
+        <h2 class="section-title">The Tetris Experiment at Scale</h2>
+
+        <p>The game designer Clint Hocking once proposed that by changing only the narrative skin of <em>Tetris</em> — telling players, for example, that the blocks were families being packed into cattle cars, and when filled, would be sent off to camps — you could give the game an entirely new meaning without touching the gameplay.</p>
+
+        <p>This was my chance to test that theory at massive scale.</p>
+
+        <div class="content-image">
+            <img src="Dying%20Light/Image%202.jpg" alt="Dying Light 2 gameplay">
+        </div>
+
+        <p>The work required a ground-up rebuild of the narrative layer — the connective tissue between the button presses:</p>
+
+        <div class="work-items">
+            <div class="work-item">
+                <p>New character backstory that aligned player and protagonist motivation</p>
+            </div>
+            <div class="work-item">
+                <p>Restructured missions so each answer became the question leading to the next</p>
+            </div>
+            <div class="work-item">
+                <p>Real branching with compounding consequences — choices that mattered</p>
+            </div>
+            <div class="work-item">
+                <p>A new ending built on callbacks to decisions made throughout</p>
+            </div>
+        </div>
+
+        <p>As Narrative Director, I was the vision holder for the entire initiative — hiring and leading a writers' room, overseeing all creative departments, working hand-in-hand with design and animation. Together we produced over a thousand pages of ambitious, intricately branching narrative architecture, all designed to wrap around existing gameplay like a new skin.</p>
+
+        <div class="section-break"></div>
+
+        <p class="section-label">What I Learned</p>
+        <h2 class="section-title">Meaning Without Mechanics</h2>
+
+        <p>The missions stayed the same. The mechanics stayed the same. But by rewriting the context — why you were doing each thing, who you were doing it for, what you stood to lose — the experience transformed.</p>
+
+        <div class="pull-quote">
+            <p>"You can change what something means without changing what it does."</p>
+        </div>
+
+        <div class="content-image">
+            <img src="Dying%20Light/IMage%203.jpg" alt="Dying Light 2 narrative design">
+        </div>
+
+        <p>A language model's capabilities are its mechanics. But what makes it feel trustworthy, engaging, worth returning to — that's the narrative layer. The personality. The motivation. The emotional coherence.</p>
+
+        <p style="font-size: 1.25rem; color: #2c1810; font-weight: 400; margin-top: 3rem;">Techland taught me that even when you can't change an underlying system, you can change everything about what that system makes you feel.</p>
+    </div>
+
+    <!-- Bottom Case Studies -->
+    <div class="bottom-case-studies">
+        <a href="case-study-moonlight.html" class="bottom-case-study">
+            <img src="Murder%20at%20Moonlight%20Lodge/Hero%20Image%202.png" alt="Murder at Moonlight Lodge" style="object-position: center calc(50% + 20px);">
+        </a>
+        <a href="case-study-orion.html" class="bottom-case-study">
+            <img src="Orion%20Drift/Hero%20Image%202.jpeg" alt="Orion Drift" style="object-position: center calc(50% + 10px);">
+        </a>
+        <a href="case-study-groundhog.html" class="bottom-case-study">
+            <img src="Groundhog%20Day/Hero-art.webp.jpeg" alt="Groundhog Day: Like Father Like Son" style="object-position: center calc(50% + 25px);">
+        </a>
+        <a href="case-study-dyinglight.html" class="bottom-case-study">
+            <img src="Dying%20Light/Hero%20Image.jpeg" alt="Dying Light 2 Redux" style="object-position: center calc(50% + 10px);">
+        </a>
+    </div>
+
+    <!-- Footer -->
+    <footer>
+        <p>&copy; 2026 Joshua Rubin · <a href="mailto:joshua.r.rubin@gmail.com">joshua.r.rubin@gmail.com</a></p>
+    </footer>
+
+    <script>
+        // Pull quote animations
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('visible');
+                }
+            });
+        }, { threshold: 0.2 });
+
+        document.querySelectorAll('.pull-quote').forEach(quote => {
+            observer.observe(quote);
+        });
+    </script>
+</body>
+</html>

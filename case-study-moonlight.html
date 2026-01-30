@@ -1,0 +1,414 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Murder at Moonlight Lodge | Joshua Rubin</title>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600&family=Source+Sans+3:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            font-family: 'Source Sans 3', -apple-system, BlinkMacSystemFont, sans-serif;
+            font-weight: 300;
+            line-height: 1.8;
+            color: #3d2e1f;
+            background-color: #faf6f1;
+        }
+
+        /* Navigation */
+        .nav {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            background: rgba(250, 246, 241, 0.95);
+            backdrop-filter: blur(10px);
+            padding: 1rem 2rem;
+            z-index: 1000;
+            border-bottom: 1px solid rgba(212, 165, 116, 0.3);
+        }
+
+        .nav-inner {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .nav-name {
+            font-family: 'Playfair Display', Georgia, serif;
+            font-size: 1.25rem;
+            color: #2c1810;
+            text-decoration: none;
+        }
+
+        .nav-back {
+            color: #8b4513;
+            text-decoration: none;
+            font-size: 0.95rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .nav-back:hover {
+            color: #2c1810;
+        }
+
+        /* Hero Section */
+        .case-hero {
+            padding: 8rem 2rem 4rem;
+            background: linear-gradient(135deg, #d4a574 0%, #8b6914 100%);
+            color: #fff;
+            text-align: center;
+        }
+
+        .case-label {
+            font-size: 0.9rem;
+            text-transform: uppercase;
+            letter-spacing: 0.15em;
+            color: #fff;
+            margin-bottom: 1rem;
+        }
+
+        .case-title {
+            font-family: 'Playfair Display', Georgia, serif;
+            font-size: 3rem;
+            font-weight: 500;
+            margin-bottom: 1.5rem;
+        }
+
+        .case-subtitle {
+            font-size: 1.3rem;
+            color: #fff;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        /* Hero Image */
+        .hero-image-section {
+            padding: 0 2rem;
+            margin-top: -3rem;
+            position: relative;
+            z-index: 10;
+        }
+
+        .hero-image-container {
+            max-width: 900px;
+            margin: 0 auto;
+            border-radius: 20px;
+            overflow: hidden;
+            box-shadow: 0 20px 60px rgba(61, 46, 31, 0.2);
+        }
+
+        .hero-image-container img {
+            width: 100%;
+            height: auto;
+            display: block;
+        }
+
+        /* Content */
+        .content {
+            max-width: 680px;
+            margin: 0 auto;
+            padding: 4rem 2rem;
+        }
+
+        .section-label {
+            font-size: 0.85rem;
+            text-transform: uppercase;
+            letter-spacing: 0.15em;
+            color: #8b6914;
+            margin-bottom: 0.75rem;
+        }
+
+        .section-title {
+            font-family: 'Playfair Display', Georgia, serif;
+            font-size: 2rem;
+            font-weight: 500;
+            color: #2c1810;
+            margin-bottom: 1.5rem;
+        }
+
+        p {
+            font-size: 1.15rem;
+            margin-bottom: 1.5rem;
+            color: #4a3728;
+        }
+
+        /* Pull Quotes */
+        .pull-quote {
+            margin: 3rem 0;
+            padding: 2rem 0;
+            border-top: 1px solid #d4a574;
+            border-bottom: 1px solid #d4a574;
+            opacity: 0;
+            transform: translateY(40px);
+            transition: opacity 0.8s ease-out, transform 0.8s ease-out;
+        }
+
+        .pull-quote.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .pull-quote p {
+            font-family: 'Playfair Display', Georgia, serif;
+            font-size: 1.5rem;
+            font-weight: 400;
+            line-height: 1.5;
+            color: #8b4513;
+            text-align: center;
+            font-style: italic;
+            margin-bottom: 0;
+        }
+
+        /* Section breaks */
+        .section-break {
+            height: 1px;
+            background: linear-gradient(90deg, transparent, #d4a574, transparent);
+            margin: 4rem 0;
+        }
+
+        /* Principles List */
+        .principles {
+            margin: 2rem 0;
+        }
+
+        .principle {
+            margin-bottom: 2rem;
+            padding-left: 1.5rem;
+            border-left: 3px solid #d4a574;
+        }
+
+        .principle h4 {
+            font-family: 'Playfair Display', Georgia, serif;
+            font-size: 1.2rem;
+            color: #8b4513;
+            margin-bottom: 0.5rem;
+        }
+
+        .principle p {
+            margin-bottom: 0;
+            font-size: 1.05rem;
+        }
+
+        /* Content Images */
+        .content-image {
+            margin: 3rem 0;
+            border-radius: 16px;
+            overflow: hidden;
+            box-shadow: 0 8px 30px rgba(61, 46, 31, 0.12);
+        }
+
+        .content-image img {
+            width: 100%;
+            height: auto;
+            display: block;
+        }
+
+        /* Bottom Case Studies */
+        .bottom-case-studies {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 1rem;
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 3rem 2rem 5rem;
+        }
+
+        .bottom-case-study {
+            display: block;
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 4px 15px rgba(61, 46, 31, 0.1);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .bottom-case-study:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 25px rgba(61, 46, 31, 0.15);
+        }
+
+        .bottom-case-study img {
+            width: 100%;
+            height: 120px;
+            object-fit: cover;
+            display: block;
+        }
+
+        /* Footer */
+        footer {
+            text-align: center;
+            padding: 3rem 2rem;
+            background: #2c1810;
+            color: rgba(255, 255, 255, 0.7);
+            font-size: 0.9rem;
+        }
+
+        footer a {
+            color: #d4a574;
+            text-decoration: none;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .case-title {
+                font-size: 2.2rem;
+            }
+
+            .section-title {
+                font-size: 1.6rem;
+            }
+
+            .content {
+                padding: 3rem 1.5rem;
+            }
+
+            .hero-image-container {
+                height: 250px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="nav">
+        <div class="nav-inner">
+            <a href="index.html" class="nav-name">Joshua Rubin</a>
+            <a href="index.html#work" class="nav-back">← Back to Work</a>
+        </div>
+    </nav>
+
+    <!-- Hero -->
+    <section class="case-hero">
+        <p class="case-label">AI + Social VR · Meta / Jon Snoddy (2025)</p>
+        <h1 class="case-title">Murder at Moonlight Lodge</h1>
+        <p class="case-subtitle">Designing a social game where conversation with AI characters is the core mechanic.</p>
+    </section>
+
+    <!-- Hero Image -->
+    <div class="hero-image-section">
+        <div class="hero-image-container">
+            <img src="Murder%20at%20Moonlight%20Lodge/Image%201.png" alt="Murder at Moonlight Lodge">
+        </div>
+    </div>
+
+    <!-- Content -->
+    <div class="content">
+        <p class="section-label">The Challenge</p>
+        <h2 class="section-title">From Demo to Experience</h2>
+
+        <p>Jon Snoddy — former head of R&D at Disney Imagineering — had put together a stellar team and built an AI character prototype that got Meta excited. The demo was impressive: characters that could converse, respond and remember with multiple players at once.</p>
+
+        <p>But a demo isn't a game. The team had no one who could turn this technology into something people would actually want to play — especially in social VR, where the experience needed to work for groups of friends.</p>
+
+        <div class="pull-quote">
+            <p>"How do you design a social game where the core mechanic is conversation with AI characters?"</p>
+        </div>
+
+        <p class="section-label">The Approach</p>
+        <h2 class="section-title">Conversation as Gameplay</h2>
+
+        <p>I designed a multiplayer social mystery game — think <em>Clue</em> meets <em>Among Us</em> in a haunted mansion. Players work together to solve a murder, with AI characters who know more than they're willing to say.</p>
+
+        <div class="content-image">
+            <img src="Murder%20at%20Moonlight%20Lodge/Image%202.png" alt="Murder at Moonlight Lodge gameplay">
+        </div>
+
+        <p>The principles I developed made a very fun game, but were also deeply instructive about designing for AI:</p>
+
+        <div class="principles">
+            <div class="principle">
+                <h4>Characters as lock-and-key puzzles</h4>
+                <p>Every AI character has something they're hiding and multiple ways to coax it out. The player's job is to figure out how to unlock them — emotionally, socially, or strategically.</p>
+            </div>
+
+            <div class="principle">
+                <h4>"Yes and" the player</h4>
+                <p>Multiple paths honor player agency. Characters always have more than one method to unlock their clues. The game never punishes a choice; it meets players where they are. This is what makes interaction feel like collaboration.</p>
+            </div>
+
+            <div class="principle">
+                <h4>Memory creates relationship</h4>
+                <p>Characters remember not just what you said, but how you made them feel. Kindness opens doors in future sessions. Cruelty closes them. Emotional continuity is what makes an AI feel like someone you have history with.</p>
+            </div>
+
+            <div class="principle">
+                <h4>Depth is revealed over time</h4>
+                <p>Characters have layers that only unlock after your 5th, 10th, 20th conversation across multiple sessions. The relationship rewards returning — there's always more to discover.</p>
+            </div>
+
+            <div class="principle">
+                <h4>Social dynamics layer on top of AI interactions</h4>
+                <p>The AI characters aren't the whole game; they're the substrate on which human social dynamics play out (trading clues, lying, alliances, betrayal). When characters and players are interacting as a group, distinctions between reality and fiction disappear.</p>
+            </div>
+        </div>
+
+        <div class="section-break"></div>
+
+        <p class="section-label">What I Learned</p>
+        <h2 class="section-title">Design Over Technology</h2>
+
+        <p>The project was a deep dive into AI character technology and prompt engineering — what works, what doesn't, and why.</p>
+
+        <p>Open-ended conversation is the trap so many AI experiences fall into. Open-ended conversation is boring. You can talk about anything, so there's no reason to talk about anything in particular.</p>
+
+        <p>The solution isn't better AI. It's better design: gamifying conversations, leading with mystery, giving users goals to pursue and multiple strategies to achieve them.</p>
+
+        <p>This is where my background became essential. I drew on principles from both game design (player agency within structured possibility spaces) and experiential theater (scenes with clear dramatic stakes guided by classic improv structure of intentions and events) to create interactions that felt genuinely playful.</p>
+
+        <p style="font-size: 1.25rem; color: #2c1810; font-weight: 400; margin-top: 3rem;">The hardest problem in AI interaction isn't the technology. It's the experience design.</p>
+
+        <div class="content-image">
+            <img src="Murder%20at%20Moonlight%20Lodge/Image%203.png" alt="Murder at Moonlight Lodge design">
+        </div>
+    </div>
+
+    <!-- Bottom Case Studies -->
+    <div class="bottom-case-studies">
+        <a href="case-study-moonlight.html" class="bottom-case-study">
+            <img src="Murder%20at%20Moonlight%20Lodge/Hero%20Image%202.png" alt="Murder at Moonlight Lodge" style="object-position: center calc(50% + 20px);">
+        </a>
+        <a href="case-study-orion.html" class="bottom-case-study">
+            <img src="Orion%20Drift/Hero%20Image%202.jpeg" alt="Orion Drift" style="object-position: center calc(50% + 10px);">
+        </a>
+        <a href="case-study-groundhog.html" class="bottom-case-study">
+            <img src="Groundhog%20Day/Hero-art.webp.jpeg" alt="Groundhog Day: Like Father Like Son" style="object-position: center calc(50% + 25px);">
+        </a>
+        <a href="case-study-dyinglight.html" class="bottom-case-study">
+            <img src="Dying%20Light/Hero%20Image.jpeg" alt="Dying Light 2 Redux" style="object-position: center calc(50% + 10px);">
+        </a>
+    </div>
+
+    <!-- Footer -->
+    <footer>
+        <p>&copy; 2026 Joshua Rubin · <a href="mailto:joshua.r.rubin@gmail.com">joshua.r.rubin@gmail.com</a></p>
+    </footer>
+
+    <script>
+        // Pull quote animations
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('visible');
+                }
+            });
+        }, { threshold: 0.2 });
+
+        document.querySelectorAll('.pull-quote').forEach(quote => {
+            observer.observe(quote);
+        });
+    </script>
+</body>
+</html>

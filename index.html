@@ -1,0 +1,1220 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Joshua Rubin | Narrative Architect</title>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600&family=Source+Sans+3:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            font-family: 'Source Sans 3', -apple-system, BlinkMacSystemFont, sans-serif;
+            font-weight: 300;
+            line-height: 1.8;
+            color: #3d2e1f;
+            background-color: #faf6f1;
+        }
+
+        /* Navigation */
+        .nav {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            background: rgba(250, 246, 241, 0.95);
+            backdrop-filter: blur(10px);
+            padding: 1rem 2rem;
+            z-index: 1000;
+            transform: translateY(-100%);
+            transition: transform 0.3s ease;
+            border-bottom: 1px solid rgba(212, 165, 116, 0.3);
+        }
+
+        .nav.visible {
+            transform: translateY(0);
+        }
+
+        .nav-inner {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .nav-name {
+            font-family: 'Playfair Display', Georgia, serif;
+            font-size: 1.25rem;
+            color: #2c1810;
+            text-decoration: none;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 2rem;
+            list-style: none;
+        }
+
+        .nav-links a {
+            color: #4a3728;
+            text-decoration: none;
+            font-size: 0.95rem;
+            font-weight: 400;
+            transition: color 0.2s;
+        }
+
+        .nav-links a:hover {
+            color: #8b4513;
+        }
+
+        .nav-button {
+            background: #8b4513;
+            color: #fff !important;
+            padding: 0.5rem 1rem;
+            border-radius: 6px;
+            transition: background 0.2s ease;
+        }
+
+        .nav-button:hover {
+            background: #6b3410;
+            color: #fff !important;
+        }
+
+        .nav-dropdown {
+            position: relative;
+        }
+
+        .dropdown-menu {
+            position: absolute;
+            top: 100%;
+            left: 0;
+            background: rgba(250, 246, 241, 0.98);
+            border: 1px solid rgba(212, 165, 116, 0.3);
+            border-radius: 8px;
+            padding: 0.5rem 0;
+            min-width: 240px;
+            opacity: 0;
+            visibility: hidden;
+            transform: translateY(10px);
+            transition: all 0.2s ease;
+            box-shadow: 0 4px 20px rgba(61, 46, 31, 0.1);
+        }
+
+        .nav-dropdown:hover .dropdown-menu {
+            opacity: 1;
+            visibility: visible;
+            transform: translateY(0);
+        }
+
+        .dropdown-menu li {
+            list-style: none;
+        }
+
+        .dropdown-menu a {
+            display: block;
+            padding: 0.6rem 1.25rem;
+            font-size: 0.9rem;
+            white-space: nowrap;
+        }
+
+        .dropdown-menu a:hover {
+            background: rgba(212, 165, 116, 0.15);
+        }
+
+        /* Hero Section */
+        .hero {
+            min-height: 85vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 4rem 2rem;
+            background: linear-gradient(180deg, #f5ebe0 0%, #faf6f1 100%);
+            position: relative;
+        }
+
+        .hero-image {
+            width: 280px;
+            height: 280px;
+            border-radius: 50%;
+            object-fit: cover;
+            object-position: center top;
+            margin-bottom: 2.5rem;
+            box-shadow: 0 20px 60px rgba(61, 46, 31, 0.15);
+        }
+
+        .hero-name {
+            font-family: 'Playfair Display', Georgia, serif;
+            font-size: 3.5rem;
+            font-weight: 500;
+            letter-spacing: -0.02em;
+            margin-bottom: 0.5rem;
+            color: #2c1810;
+        }
+
+        .hero-title {
+            font-size: 1.25rem;
+            font-weight: 400;
+            letter-spacing: 0.15em;
+            text-transform: uppercase;
+            color: #8b6914;
+            margin-bottom: 0.5rem;
+        }
+
+        .hero-subtitle {
+            font-size: 1.15rem;
+            font-weight: 400;
+            letter-spacing: 0.05em;
+            color: #4a3728;
+            margin-top: 25px;
+        }
+
+        /* Scroll Indicator */
+        .scroll-indicator {
+            position: absolute;
+            bottom: 2rem;
+            left: 50%;
+            transform: translateX(-50%);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 0.5rem;
+            color: #8b6914;
+            opacity: 0.7;
+            animation: bounce 2s infinite;
+        }
+
+        .scroll-indicator span {
+            font-size: 0.75rem;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+        }
+
+        .scroll-indicator svg {
+            width: 24px;
+            height: 24px;
+        }
+
+        @keyframes bounce {
+            0%, 20%, 50%, 80%, 100% {
+                transform: translateX(-50%) translateY(0);
+            }
+            40% {
+                transform: translateX(-50%) translateY(-8px);
+            }
+            60% {
+                transform: translateX(-50%) translateY(-4px);
+            }
+        }
+
+        /* Main Content */
+        .content {
+            max-width: 680px;
+            margin: 0 auto;
+            padding: 6rem 2rem 4rem;
+        }
+
+        .section-title {
+            font-family: 'Playfair Display', Georgia, serif;
+            font-size: 2.5rem;
+            font-weight: 500;
+            letter-spacing: -0.02em;
+            margin-bottom: 2rem;
+            color: #2c1810;
+            text-align: center;
+        }
+
+        p {
+            font-size: 1.2rem;
+            margin-bottom: 1.8rem;
+            color: #4a3728;
+        }
+
+        /* Pull Quotes */
+        .pull-quote {
+            margin: 4rem 0;
+            padding: 2rem 0;
+            border-top: 1px solid #d4a574;
+            border-bottom: 1px solid #d4a574;
+            opacity: 0;
+            transform: translateY(40px);
+            transition: opacity 0.8s ease-out, transform 0.8s ease-out;
+        }
+
+        .pull-quote.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .pull-quote p {
+            font-family: 'Playfair Display', Georgia, serif;
+            font-size: 1.75rem;
+            font-weight: 400;
+            line-height: 1.5;
+            color: #8b4513;
+            text-align: center;
+            font-style: italic;
+            margin-bottom: 0;
+        }
+
+        /* Intro closing image */
+        .intro-closing-image {
+            margin-top: 4rem;
+            border-radius: 16px;
+            overflow: hidden;
+            box-shadow: 0 8px 30px rgba(61, 46, 31, 0.12);
+        }
+
+        .intro-closing-image img {
+            width: 100%;
+            height: auto;
+            display: block;
+        }
+
+        /* Section breaks */
+        .section-break {
+            height: 1px;
+            background: linear-gradient(90deg, transparent, #d4a574, transparent);
+            margin: 4rem 0;
+        }
+
+        /* Full-width sections */
+        .full-width-section {
+            padding: 6rem 2rem;
+            background: #f5ebe0;
+        }
+
+        .full-width-section.alt {
+            background: #faf6f1;
+        }
+
+        .section-inner {
+            max-width: 900px;
+            margin: 0 auto;
+        }
+
+        /* Philosophy Section */
+        .philosophy-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 3rem;
+            margin: 3rem 0;
+        }
+
+        .philosophy-card {
+            padding: 2rem;
+            background: rgba(255, 255, 255, 0.5);
+            border-radius: 12px;
+            border: 1px solid rgba(212, 165, 116, 0.3);
+        }
+
+        .philosophy-card h3 {
+            font-family: 'Playfair Display', Georgia, serif;
+            font-size: 1.5rem;
+            color: #8b4513;
+            margin-bottom: 1rem;
+        }
+
+        .philosophy-card p {
+            font-size: 1.1rem;
+            margin-bottom: 0;
+        }
+
+        /* Case Studies Grid */
+        .case-studies-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 2rem;
+            margin-top: 3rem;
+        }
+
+        .case-study-card {
+            background: #fff;
+            border-radius: 16px;
+            overflow: hidden;
+            box-shadow: 0 4px 20px rgba(61, 46, 31, 0.08);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            text-decoration: none;
+            color: inherit;
+            display: block;
+        }
+
+        .case-study-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 12px 40px rgba(61, 46, 31, 0.15);
+        }
+
+        .case-study-image {
+            width: 100%;
+            height: 200px;
+            background: linear-gradient(135deg, #d4a574 0%, #8b6914 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .case-study-image img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .case-study-image-placeholder {
+            width: 120px;
+            height: 120px;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.2);
+            border: 2px dashed rgba(255, 255, 255, 0.4);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: rgba(255, 255, 255, 0.6);
+            font-size: 0.85rem;
+            text-align: center;
+            padding: 1rem;
+        }
+
+        .case-study-content {
+            padding: 1.5rem;
+        }
+
+        .case-study-label {
+            font-size: 0.8rem;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            color: #8b6914;
+            margin-bottom: 0.5rem;
+        }
+
+        .case-study-title {
+            font-family: 'Playfair Display', Georgia, serif;
+            font-size: 1.4rem;
+            color: #2c1810;
+            margin-bottom: 0.75rem;
+        }
+
+        .case-study-hook {
+            font-size: 1rem;
+            color: #6b5344;
+            line-height: 1.6;
+            margin-bottom: 0;
+        }
+
+        /* Collaborators Section */
+        .collaborators-wheel {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 1rem;
+            margin: 3rem 0;
+            max-width: 700px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .collaborator-tag {
+            padding: 0.75rem 1.5rem;
+            background: rgba(255, 255, 255, 0.7);
+            border: 1px solid #d4a574;
+            border-radius: 50px;
+            font-size: 1rem;
+            color: #4a3728;
+            transition: all 0.2s ease;
+        }
+
+        .collaborator-tag:hover {
+            background: #8b4513;
+            color: #fff;
+            border-color: #8b4513;
+        }
+
+        /* Speaking Section */
+        .speaking-header-image {
+            margin-bottom: 3rem;
+            border-radius: 16px;
+            overflow: hidden;
+            box-shadow: 0 8px 30px rgba(61, 46, 31, 0.12);
+        }
+
+        .speaking-header-image img {
+            width: 100%;
+            height: auto;
+            display: block;
+        }
+
+        .speaking-section {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 4rem;
+            align-items: center;
+        }
+
+        .speaking-image-container {
+            display: flex;
+            justify-content: center;
+        }
+
+        .speaking-image {
+            width: 300px;
+            height: 300px;
+            border-radius: 50%;
+            overflow: hidden;
+            box-shadow: 0 20px 60px rgba(61, 46, 31, 0.15);
+        }
+
+        .speaking-image img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .logo-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 0.5rem;
+            margin-top: 2rem;
+        }
+
+        .logo-grid img {
+            width: 100%;
+            height: 90px;
+            object-fit: cover;
+            border-radius: 10px;
+            color: #8b6914;
+            text-align: center;
+        }
+
+        /* Video Section */
+        .video-section {
+            margin-top: 4rem;
+            padding-top: 3rem;
+            border-top: 1px solid rgba(212, 165, 116, 0.3);
+        }
+
+        .video-title {
+            font-family: 'Playfair Display', Georgia, serif;
+            font-size: 1.75rem;
+            color: #2c1810;
+            text-align: center;
+            margin-bottom: 0.5rem;
+        }
+
+        .video-subtitle {
+            text-align: center;
+            font-size: 1.1rem;
+            color: #8b6914;
+            font-style: italic;
+            margin-bottom: 2rem;
+        }
+
+        .video-container {
+            border-radius: 16px;
+            overflow: hidden;
+            box-shadow: 0 8px 30px rgba(61, 46, 31, 0.12);
+            position: relative;
+            padding-bottom: 56.25%;
+            height: 0;
+        }
+
+        .video-container iframe {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+        }
+
+        .video-poster {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            cursor: pointer;
+            z-index: 10;
+            background: #f5ebe0;
+        }
+
+        .video-poster img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .play-button {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 80px;
+            height: 80px;
+            background: rgba(0, 0, 0, 0.7);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            transition: background 0.3s ease, transform 0.3s ease;
+        }
+
+        .play-button svg {
+            width: 36px;
+            height: 36px;
+            margin-left: 4px;
+        }
+
+        .video-poster:hover .play-button {
+            background: rgba(139, 69, 19, 0.9);
+            transform: translate(-50%, -50%) scale(1.1);
+        }
+
+        /* Vision Section */
+        .vision-section {
+            max-width: 680px;
+            margin: 0 auto;
+        }
+
+        /* Final statement */
+        .closing {
+            margin-top: 4rem;
+            padding-top: 3rem;
+            border-top: 2px solid #8b4513;
+        }
+
+        .closing p {
+            font-size: 1.35rem;
+            font-weight: 400;
+            color: #2c1810;
+        }
+
+        /* Thank you and signature */
+        .thank-you {
+            margin-top: 3rem;
+            position: relative;
+        }
+
+        .thank-you p {
+            font-size: 1.35rem;
+            font-weight: 400;
+            color: #2c1810;
+            margin-bottom: 0.25rem;
+        }
+
+        .thank-you .signature-name {
+            display: inline-block;
+            position: relative;
+        }
+
+        .signature-image {
+            position: absolute;
+            left: 80px;
+            top: -45px;
+            max-width: 320px;
+            height: auto;
+            mix-blend-mode: multiply;
+            opacity: 0.85;
+        }
+
+        /* Bottom Case Studies */
+        .bottom-case-studies {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 1rem;
+            margin-top: 4rem;
+            padding-top: 3rem;
+            border-top: 1px solid rgba(212, 165, 116, 0.3);
+        }
+
+        .bottom-case-study {
+            display: block;
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 4px 15px rgba(61, 46, 31, 0.1);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .bottom-case-study:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 8px 25px rgba(61, 46, 31, 0.15);
+        }
+
+        .bottom-case-study img {
+            width: 100%;
+            height: 120px;
+            object-fit: cover;
+            display: block;
+        }
+
+        @media (max-width: 768px) {
+            .bottom-case-studies {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        /* Experience Grid */
+        .experience-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 2rem 3rem;
+            margin-top: 2rem;
+        }
+
+        .experience-item {
+            padding-bottom: 1.5rem;
+            border-bottom: 1px solid rgba(212, 165, 116, 0.3);
+        }
+
+        .experience-company {
+            font-size: 0.85rem;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            color: #8b4513;
+            margin-bottom: 0.25rem;
+        }
+
+        .experience-title {
+            font-family: 'Playfair Display', Georgia, serif;
+            font-size: 1.25rem;
+            font-weight: 500;
+            color: #2c1810;
+            margin-bottom: 0.25rem;
+        }
+
+        .experience-role {
+            font-size: 0.9rem;
+            color: #6b5344;
+            margin-bottom: 0.5rem;
+        }
+
+        .experience-description {
+            font-size: 1rem;
+            color: #4a3728;
+            line-height: 1.6;
+        }
+
+        @media (max-width: 768px) {
+            .experience-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        /* Footer */
+        footer {
+            text-align: center;
+            padding: 4rem 2rem;
+            background: #2c1810;
+            color: rgba(255, 255, 255, 0.7);
+            font-size: 0.9rem;
+        }
+
+        footer a {
+            color: #d4a574;
+            text-decoration: none;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .hero-name {
+                font-size: 2.5rem;
+            }
+
+            .hero-image {
+                width: 200px;
+                height: 200px;
+            }
+
+            .section-title {
+                font-size: 2rem;
+            }
+
+            p {
+                font-size: 1.1rem;
+            }
+
+            .pull-quote p {
+                font-size: 1.4rem;
+            }
+
+            .content {
+                padding: 4rem 1.5rem 3rem;
+            }
+
+            .philosophy-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .case-studies-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .speaking-section {
+                grid-template-columns: 1fr;
+                text-align: center;
+            }
+
+            .nav-links {
+                display: none;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="nav" id="nav">
+        <div class="nav-inner">
+            <a href="#" class="nav-name">Joshua Rubin</a>
+            <ul class="nav-links">
+                <li><a href="#philosophy">Core Philosophy</a></li>
+                <li class="nav-dropdown">
+                    <a href="#work">Case Studies</a>
+                    <ul class="dropdown-menu">
+                        <li><a href="case-study-moonlight.html">Murder at Moonlight Lodge</a></li>
+                        <li><a href="case-study-orion.html">Orion Drift</a></li>
+                        <li><a href="case-study-groundhog.html">Groundhog Day: Like Father Like Son</a></li>
+                        <li><a href="case-study-dyinglight.html">Dying Light 2 Redux</a></li>
+                    </ul>
+                </li>
+                <li><a href="#experience">Experience</a></li>
+                <li><a href="#speaking">Speaking</a></li>
+                <li><a href="Joshua_Rubin_Resume%20(2026).pdf" target="_blank" class="nav-button">Download Resume</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <!-- Hero -->
+    <section class="hero">
+        <img src="20250308_SXSW-NDW_Photo-Ben-Houdijk_lr_27631.jpg" alt="Joshua Rubin" class="hero-image">
+        <h1 class="hero-name">Joshua Rubin</h1>
+        <p class="hero-title">Narrative Architect</p>
+        <p class="hero-subtitle">A Portfolio for Creative Leadership in Humanist AI</p>
+        <div class="scroll-indicator">
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 14l-7 7m0 0l-7-7m7 7V3" />
+            </svg>
+        </div>
+    </section>
+
+    <!-- Intro -->
+    <main class="content">
+        <h2 class="section-title">A Life of Exploring. A Life Explored.</h2>
+
+        <p>To make an AI that feels truly human, you need someone who has spent their life asking what it means to be human.</p>
+
+        <p>Someone who has spent their life exploring and playing and asking questions and reading the great philosophers and mystics and trying to capture life through art — while at the same time, working deeply enough with technology to push at the boundaries of what art can do for humanity.</p>
+
+        <div class="pull-quote">
+            <p>"To make an AI that feels truly human, you need someone who has spent their life asking what it means to be human."</p>
+        </div>
+
+        <p>So, let me tell you a little bit about my life outside my LinkedIn profile.</p>
+
+        <p>I was born in Manhattan, raised on a Buddhist ashram in the cornfields of the Midwest, and survived high school in Hollywood.</p>
+
+        <p>I dropped out of college to travel the world for years, to find my voice as a writer.</p>
+
+        <p>I fell in love in Paris while living in a bookstore, and discovered the depths of the human heart.</p>
+
+        <p>I biked across Europe, hiked across the French Alps, and the Himalayas in Nepal, and discovered what the human body could be pushed to.</p>
+
+        <p>I spent half a year in the British library in Florence, trying to read everything that had ever been written so far, from the Romans and Shakespeare to Proust and <em>Ulysses</em>.</p>
+
+        <p>I spent a winter in a cabin with only the mystics for company — Rumi, Meister Eckhart, Nisargadatta — trying to understand the truths that connect us all.</p>
+
+        <div class="pull-quote">
+            <p>"I fell in love in Paris while living in a bookstore, and discovered the depths of the human heart."</p>
+        </div>
+
+        <p>My primary skill set has always been as a storyteller — but focused from the beginning with curiosity about pushing the frontiers of what narrative was capable of.</p>
+
+        <p>At age 12, I won the statewide writing contest in Illinois for a short book that merged characters from a dozen different genres. This is when I knew writing was for me.</p>
+
+        <p>I graduated college with a novel of historical fiction, about the French poet Baudelaire — but it constantly broke the fourth wall to ask: how much can we ever really know about another person?</p>
+
+        <p>My first screenplays challenged the conventions of what a screenplay could be, delving into both heartbreaking European romance, inspired by filmmakers like Krystof Kieslowski, Eric Rohmer, Arnaud Desplechin — and deep sci-fi inspired by Kurt Vonnegut, Neal Stephenson and Philip K Dick.</p>
+
+        <p>One of my first screenplays won the Nicholl Fellowship, the most prestigious writing award for unproduced screenplays in Hollywood, and paved the way for a decade of work in film and TV. But I was constantly being told my vision was un-producible, too out there for what could fit on a silver screen.</p>
+
+        <div class="section-break"></div>
+
+        <p>It was in the interactive world of video games that I finally found the right place for my imagination.</p>
+
+        <p>On one hand, I became known for bringing deeply human characters to big AAA games, like the iconic Ezio Auditore in <em>Assassin's Creed 2</em> — a game that won numerous writing awards and is often listed as the best of the series. At the same time, in game design I found the world of player agency in a possibility space, the explorable story world. I helped build massive narrative systems in blockbuster AAA games like <em>Destiny</em>.</p>
+
+        <p>I was early into Virtual Reality, thrilled at the opportunity to invent an entirely new medium of storytelling, winning awards for my work and leading largescale projects with major IP.</p>
+
+        <p>And I came to specialize in creating branching narratives — from learning under the tutelage of the best at Telltale Games, to winning an Interactive Emmy for my work at Netflix, to leading the creation of a profoundly ambitious 1,000 pages of byzantine narrative architecture at Techland.</p>
+
+        <p>Throughout, I've always been trying to shape systems and storyworlds that were deeply immersive, that gave you the feeling of true Story Living — not just watching a story, <em>living inside one</em>. But even when designing thousand-page-narratives, I always bumped against the limits of what pre-authored content could do.</p>
+
+        <p>The player can only ever choose between paths that <em>you</em> designed for them to take.</p>
+
+        <div class="pull-quote">
+            <p>"Not watching a story — living inside one."</p>
+        </div>
+
+        <p>When the current wave of AI arrived, I recognized it immediately as the technology that could finally enable what I've been imagining: stories that truly respond, characters that truly listen, worlds that truly adapt.</p>
+
+        <p>The technology is capable of knowing us each in profoundly personal ways. The best AI of the future will be capable of inviting each of us into storyworlds that feel like they were designed just for us, bringing us the exact challenges, and exactly the catharsis, that we need to grow as people.</p>
+
+        <div class="pull-quote">
+            <p>"Stories that truly respond, characters that truly listen, worlds that truly adapt."</p>
+        </div>
+
+        <p>But that level of personal data about us is incredibly dangerous if misused — the same system can manipulate you, addict you, surveil you. If we don't guide these AI co-creators with intention, we'll get hollow simulacra and endless "dystopian AI slop."</p>
+
+        <p>The technology is coming fast. The question is how we shape it — as capitalists and technologists, or as humanists and storytellers?</p>
+
+        <p>My childhood (from Ashram to Hollywood), my years reading the great philosophers and mystics, the life spent writing deeply human characters and inventing narrative systems — it wasn't wandering. It was preparation.</p>
+
+        <p style="font-size: 1.35rem; font-weight: 400; color: #2c1810; margin-top: 3rem;">Now, the most exciting challenge in the world is to help an AI feel human. That's not a technical problem. It's an artistic one.</p>
+
+        <div class="intro-closing-image">
+            <img src="20250308_SXSW-NDW_Photo-Ben-Houdijk_lr_27711.jpg" alt="Joshua Rubin at SXSW">
+        </div>
+    </main>
+
+    <!-- Philosophy Section -->
+    <section class="full-width-section" id="philosophy">
+        <div class="section-inner">
+            <h2 class="section-title">The Core Philosophy</h2>
+            <p style="text-align: center; font-size: 1.4rem; color: #8b4513; font-style: italic; margin-bottom: 3rem;">Agency vs. Catharsis</p>
+
+            <p>Over the course of my career, I've learned that interactive storytelling has a central tension at its heart.</p>
+
+            <div class="philosophy-grid">
+                <div class="philosophy-card">
+                    <h3>Agency</h3>
+                    <p>What <strong>players</strong> crave — the freedom to do what you want, to shape the world, to matter.</p>
+                </div>
+                <div class="philosophy-card">
+                    <h3>Catharsis</h3>
+                    <p>What <strong>audiences</strong> crave — structure, meaning, the emotional payoff of a well-told story.</p>
+                </div>
+            </div>
+
+            <p>These two forces are fundamentally at odds. The more freedom you give, the harder it is to deliver a meaningful arc. The tighter the story, the less the player feels in control.</p>
+
+            <div class="pull-quote">
+                <p>"The magic will always be in the balance — a companion that both meets you where you are, and takes you somewhere meaningful."</p>
+            </div>
+
+            <p>Most creators live on one side or the other. Writers craft beautiful stories but struggle with systems. Designers build elegant mechanics but can't land an emotional beat.</p>
+
+            <p>I've spent my career learning to hold both.</p>
+
+            <p>I write deeply human characters. I also architect thousand-page branching systems.</p>
+
+            <p>I understand story structure and possibility spaces.</p>
+
+            <p>I know how to make you cry, and how to make you feel like it was your choices that led to that moment.</p>
+
+            <p>For AI companions, this duality is everything. An AI that only responds (pure agency) feels empty. An AI that only performs (pure catharsis) feels scripted. The magic will always be in the balance — a companion that both meets you where you are, and takes you somewhere meaningful.</p>
+        </div>
+    </section>
+
+    <!-- Case Studies Section -->
+    <section class="full-width-section alt" id="work">
+        <div class="section-inner">
+            <h2 class="section-title">Case Studies</h2>
+            <p style="text-align: center; font-size: 1.1rem; color: #6b5344; margin-bottom: 2rem;">Four initiatives where I led the creative vision, oversaw teams and solved creative problems.</p>
+
+            <div class="case-studies-grid">
+                <a href="case-study-moonlight.html" class="case-study-card">
+                    <div class="case-study-image">
+                        <img src="Murder%20at%20Moonlight%20Lodge/Hero%20Image%202.png" alt="Murder at Moonlight Lodge">
+                    </div>
+                    <div class="case-study-content">
+                        <p class="case-study-label">AI + Social VR</p>
+                        <h3 class="case-study-title">Murder at Moonlight Lodge</h3>
+                        <p class="case-study-hook">Designing a social game where conversation with AI characters is the core mechanic.</p>
+                    </div>
+                </a>
+
+                <a href="case-study-orion.html" class="case-study-card">
+                    <div class="case-study-image">
+                        <img src="Orion%20Drift/Hero%20Image%202.jpeg" alt="Orion Drift">
+                    </div>
+                    <div class="case-study-content">
+                        <p class="case-study-label">World Building</p>
+                        <h3 class="case-study-title">Orion Drift</h3>
+                        <p class="case-study-hook">How do you tell story in a game that's not about story?</p>
+                    </div>
+                </a>
+
+                <a href="case-study-groundhog.html" class="case-study-card">
+                    <div class="case-study-image">
+                        <img src="Groundhog%20Day/Hero-art.webp.jpeg" alt="Groundhog Day: Like Father Like Son">
+                    </div>
+                    <div class="case-study-content">
+                        <p class="case-study-label">IP Adaptation</p>
+                        <h3 class="case-study-title">Groundhog Day: Like Father Like Son</h3>
+                        <p class="case-study-hook">Finding the soul of a beloved IP and rebuilding it for a new medium.</p>
+                    </div>
+                </a>
+
+                <a href="case-study-dyinglight.html" class="case-study-card">
+                    <div class="case-study-image">
+                        <img src="Dying%20Light/Hero%20Image.jpeg" alt="Dying Light 2 Redux">
+                    </div>
+                    <div class="case-study-content">
+                        <p class="case-study-label">Narrative Systems</p>
+                        <h3 class="case-study-title">Dying Light 2 Redux</h3>
+                        <p class="case-study-hook">Reimagining an entire AAA narrative without changing the gameplay.</p>
+                    </div>
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Experience Section -->
+    <section class="full-width-section" id="experience">
+        <div class="section-inner">
+            <h2 class="section-title">Selected Creative Leadership</h2>
+
+            <div class="experience-grid">
+                <div class="experience-item">
+                    <p class="experience-company">Netflix</p>
+                    <h3 class="experience-title">Black Mirror LBVR Experience</h3>
+                    <p class="experience-role">Lead Writer, 2025</p>
+                    <p class="experience-description">Writer for location-based VR adaptation of the iconic sci-fi TV series.</p>
+                </div>
+
+                <div class="experience-item">
+                    <p class="experience-company">Netflix</p>
+                    <h3 class="experience-title">You vs. Wild</h3>
+                    <p class="experience-role">Narrative Designer, 2021–2022</p>
+                    <p class="experience-description">Interactive Emmy winner. Co-designed branching narrative for Bear Grylls series.</p>
+                </div>
+
+                <div class="experience-item">
+                    <p class="experience-company">People Can Fly</p>
+                    <h3 class="experience-title">Outriders + DLC</h3>
+                    <p class="experience-role">Lead Writer, 2017–2022</p>
+                    <p class="experience-description">Created original sci-fi universe. Directed all VO. International press tour.</p>
+                </div>
+
+                <div class="experience-item">
+                    <p class="experience-company">Square Enix</p>
+                    <h3 class="experience-title">Just Cause: Mobile</h3>
+                    <p class="experience-role">Narrative Director, 2018–2022</p>
+                    <p class="experience-description">Led international team to design and write hundreds of interconnected missions.</p>
+                </div>
+
+                <div class="experience-item">
+                    <p class="experience-company">Nokia / Magnopus</p>
+                    <h3 class="experience-title">The Argos File</h3>
+                    <p class="experience-role">Co-Creator, 2015–2017</p>
+                    <p class="experience-description">Award-winning original sci-fi VR film. Venice Film Festival premiere. Proto Award: Best Live Action VR.</p>
+                </div>
+
+                <div class="experience-item">
+                    <p class="experience-company">Telltale Games</p>
+                    <h3 class="experience-title">Walking Dead / Game of Thrones</h3>
+                    <p class="experience-role">Lead Writer, 2014–2016</p>
+                    <p class="experience-description">Wrote and designed branching architecture for a dozen episodes with world-class IP.</p>
+                </div>
+
+                <div class="experience-item">
+                    <p class="experience-company">Bungie</p>
+                    <h3 class="experience-title">Destiny</h3>
+                    <p class="experience-role">Writer, 2012–2014</p>
+                    <p class="experience-description">Core creative team that launched the franchise. Lead Designer behind Dead Ghosts / Grimoire lore system.</p>
+                </div>
+
+                <div class="experience-item">
+                    <p class="experience-company">Ubisoft</p>
+                    <h3 class="experience-title">Assassin's Creed 2</h3>
+                    <p class="experience-role">Co-Lead Writer, 2008–2009</p>
+                    <p class="experience-description">Multiple "Best Narrative" wins. Often listed as best of the series.</p>
+                </div>
+            </div>
+
+            <p style="text-align: center; margin-top: 2.5rem;"><a href="Joshua_Rubin_Resume%20(2026).pdf" target="_blank" style="color: #8b4513; text-decoration: none; font-size: 1.1rem; border-bottom: 1px solid #d4a574;">Download Full Resume →</a></p>
+        </div>
+    </section>
+
+    <!-- Collaborators Section -->
+    <section class="full-width-section alt" id="collaborators">
+        <div class="section-inner">
+            <h2 class="section-title">Creative Collaborators Across Every Medium</h2>
+
+            <p style="text-align: center; max-width: 600px; margin: 0 auto 2rem;">Because I've worked across so many mediums, my network of collaborators and creative partners runs deep across the artistic spectrum.</p>
+
+            <div class="collaborators-wheel">
+                <span class="collaborator-tag">AAA Games</span>
+                <span class="collaborator-tag">Euro Indie Games</span>
+                <span class="collaborator-tag">Hollywood</span>
+                <span class="collaborator-tag">Television</span>
+                <span class="collaborator-tag">VR/AR</span>
+                <span class="collaborator-tag">Location Based VR</span>
+                <span class="collaborator-tag">Immersive Theater</span>
+                <span class="collaborator-tag">Comics</span>
+                <span class="collaborator-tag">AI Research</span>
+                <span class="collaborator-tag">Puppetry</span>
+                <span class="collaborator-tag">ARGs</span>
+                <span class="collaborator-tag">Escape Rooms</span>
+                <span class="collaborator-tag">Theme Parks</span>
+                <span class="collaborator-tag">Academia</span>
+            </div>
+
+            <p style="text-align: center; font-size: 1.2rem; color: #8b4513; font-style: italic; margin-top: 2rem;">When it's time to assemble a team of creative unicorns, I know where to find them.</p>
+        </div>
+    </section>
+
+    <!-- Speaking Section -->
+    <section class="full-width-section alt" id="speaking">
+        <div class="section-inner">
+            <h2 class="section-title">Shaping the Conversation</h2>
+
+            <div class="speaking-header-image">
+                <img src="Shaping%20the%20Conversation/Place%20below%20title.png" alt="Joshua Rubin speaking">
+            </div>
+
+            <div class="speaking-section">
+                <div class="speaking-image-container">
+                    <div class="speaking-image">
+                        <img src="Shaping%20the%20Conversation/Hero%20Image%20in%20circle.png" alt="Joshua Rubin">
+                    </div>
+                </div>
+                <div>
+                    <p>I've been speaking at conferences and universities around the world on the future of interactive narrative, AI co-creation, and what it means to build story worlds that offer radical agency without losing what makes stories matter.</p>
+                    <p>These aren't just talks. They're invitations to wrestle with the questions that will define the next era of storytelling.</p>
+
+                    <div class="logo-grid">
+                        <img src="Shaping%20the%20Conversation/Logos/1.jpeg" alt="Conference">
+                        <img src="Shaping%20the%20Conversation/Logos/2.jpeg" alt="University">
+                        <img src="Shaping%20the%20Conversation/Logos/3.jpeg" alt="Event">
+                        <img src="Shaping%20the%20Conversation/Logos/4.png" alt="Conference">
+                        <img src="Shaping%20the%20Conversation/Logos/5.jpeg" alt="University">
+                        <img src="Shaping%20the%20Conversation/Logos/6.jpeg" alt="Event">
+                    </div>
+                </div>
+            </div>
+
+            <div class="video-section">
+                <h3 class="video-title">CIIIC Masterclass Interview</h3>
+                <p class="video-subtitle">On the future of interactive storytelling and radical agency</p>
+                <div class="video-container" id="video-container">
+                    <div class="video-poster" id="video-poster" onclick="playVideo()">
+                        <img src="ciiic%20Masterclass%20interveiw%203%20(cover%20image).png" alt="Click to play video">
+                        <div class="play-button">
+                            <svg viewBox="0 0 24 24" fill="currentColor">
+                                <path d="M8 5v14l11-7z"/>
+                            </svg>
+                        </div>
+                    </div>
+                    <iframe id="vimeo-player" frameborder="0" allow="autoplay; fullscreen; picture-in-picture" allowfullscreen style="display: none !important;"></iframe>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Vision Section -->
+    <section class="full-width-section" id="vision">
+        <div class="vision-section">
+            <h2 class="section-title">Toward Humanist AI</h2>
+
+            <p>Last week I spoke to a hundred freshmen at an emerging media arts program in the Midwest — the future builders. I asked how many were using AI in their creative work.</p>
+
+            <p>One hand went up.</p>
+
+            <p>These are students at an <em>emerging media arts</em> program! And they're not touching the most transformative creative technology of their generation.</p>
+
+            <p>Why? Because they're <strong>terrified</strong> of it.</p>
+
+            <p>They don't see the magic. They see the monster coming to destroy their futures before those futures even begin.</p>
+
+            <p>Mustafa Suleyman talks about "the disconnect between people who develop technologies and the communities who use them." I saw that disconnect in a room full of eighteen-year-olds who should be the most excited people on the planet about these tools.</p>
+
+            <div class="pull-quote">
+                <p>"They don't see the magic. They see the monster coming to destroy their futures before those futures even begin."</p>
+            </div>
+
+            <p>If the next generation sees AI as an existential threat rather than a trusted companion, that technology doesn't have a long future. If we can't address their fears, protect their livelihoods, and earn their trust — it doesn't matter that we're building the most powerful tools in human history.</p>
+
+            <div class="closing">
+                <p>The technology is coming fast. If it's going to earn human trust, it needs to be shaped by people who have spent their life exploring, and exploring what it means to be human.</p>
+            </div>
+
+            <div class="thank-you">
+                <p>Thank you.</p>
+                <p class="signature-name">
+                    — Joshua Rubin
+                    <img src="Signature.png" alt="Joshua Rubin signature" class="signature-image">
+                </p>
+            </div>
+
+            <div class="bottom-case-studies">
+                <a href="case-study-moonlight.html" class="bottom-case-study">
+                    <img src="Murder%20at%20Moonlight%20Lodge/Hero%20Image%202.png" alt="Murder at Moonlight Lodge" style="object-position: center calc(50% + 20px);">
+                </a>
+                <a href="case-study-orion.html" class="bottom-case-study">
+                    <img src="Orion%20Drift/Hero%20Image%202.jpeg" alt="Orion Drift" style="object-position: center calc(50% + 10px);">
+                </a>
+                <a href="case-study-groundhog.html" class="bottom-case-study">
+                    <img src="Groundhog%20Day/Hero-art.webp.jpeg" alt="Groundhog Day: Like Father Like Son" style="object-position: center calc(50% + 20px);">
+                </a>
+                <a href="case-study-dyinglight.html" class="bottom-case-study">
+                    <img src="Dying%20Light/Hero%20Image.jpeg" alt="Dying Light 2 Redux" style="object-position: center calc(50% + 10px);">
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer>
+        <p>&copy; 2026 Joshua Rubin · <a href="mailto:joshua.r.rubin@gmail.com">joshua.r.rubin@gmail.com</a></p>
+    </footer>
+
+    <script>
+        // Navigation visibility on scroll
+        const nav = document.getElementById('nav');
+        const hero = document.querySelector('.hero');
+
+        const navObserver = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    nav.classList.remove('visible');
+                } else {
+                    nav.classList.add('visible');
+                }
+            });
+        }, { threshold: 0.1 });
+
+        navObserver.observe(hero);
+
+        // Pull quote animations
+        const pullQuoteObserver = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('visible');
+                }
+            });
+        }, { threshold: 0.2 });
+
+        document.querySelectorAll('.pull-quote').forEach(quote => {
+            pullQuoteObserver.observe(quote);
+        });
+
+        // Video poster click handler
+        function playVideo() {
+            const poster = document.getElementById('video-poster');
+            const iframe = document.getElementById('vimeo-player');
+            poster.style.display = 'none';
+            iframe.src = 'https://player.vimeo.com/video/1159891985?autoplay=1';
+            iframe.style.cssText = 'display: block !important;';
+        }
+    </script>
+</body>
+</html>
